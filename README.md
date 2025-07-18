@@ -11,5 +11,5 @@ Here are some ideas to get you started:
 - 💬 Ask me about Web design.
 - 📫 How to reach me: dhruvadhiya230407@gmail.com.
 - 😄 Pronouns: HE/HIM.
-- ⚡ Fun fact: I know how to use Ai.
+  
 
