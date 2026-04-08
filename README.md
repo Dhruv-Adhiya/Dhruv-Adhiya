@@ -1,80 +1,21 @@
-create table public.recurring_transactions (
-  id serial not null,
-  user_id integer not null,
-  category_id integer not null,
-  type character varying(20) not null,
-  amount numeric(10, 2) not null,
-  description text null,
-  frequency character varying(20) not null,
-  start_date date not null,
-  end_date date null,
-  next_run_date date not null,
-  last_run_date date null,
-  is_active boolean not null default true,
-  created_at timestamp without time zone null default CURRENT_TIMESTAMP,
-  payment_source character varying(20) not null default 'online'::character varying,
-  constraint recurring_transactions_pkey primary key (id),
-  constraint recurring_transactions_category_id_fkey foreign KEY (category_id) references categories (id) on delete RESTRICT,
-  constraint recurring_transactions_user_id_fkey foreign KEY (user_id) references users (id) on delete CASCADE,
-  constraint recurring_transactions_amount_check check ((amount > (0)::numeric)),
-  constraint recurring_transactions_payment_source_check check (
-    (
-      (payment_source)::text = any (
-        (
-          array[
-            'cash'::character varying,
-            'online'::character varying,
-            'credit_card'::character varying
-          ]
-        )::text[]
-      )
-    )
-  ),
-  constraint recurring_transactions_type_check check (
-    (
-      (type)::text = any (
-        (
-          array[
-            'income'::character varying,
-            'expense'::character varying
-          ]
-        )::text[]
-      )
-    )
-  ),
-  constraint recurring_transactions_next_run_check check ((next_run_date >= start_date)),
-  constraint recurring_transactions_date_check check (
-    (
-      (end_date is null)
-      or (end_date >= start_date)
-    )
-  ),
-  constraint recurring_transactions_frequency_check check (
-    (
-      (frequency)::text = any (
-        (
-          array[
-            'daily'::character varying,
-            'weekly'::character varying,
-            'monthly'::character varying,
-            'yearly'::character varying
-          ]
-        )::text[]
-      )
-    )
-  )
-) TABLESPACE pg_default;
+Hi ![](https://user-images.githubusercontent.com/18350557/176309783-0785949b-9127-417c-8b55-ab5a4333674e.gif) My name is Dhruv Adhiya
+=====================================================================================================================================
 
-create index IF not exists idx_recurring_transactions_user_id on public.recurring_transactions using btree (user_id) TABLESPACE pg_default;
+* ✉️  You can contact me at [dhruvadhiya230407@gmail.com](mailto:dhruvadhiya230407@gmail.com)
 
-create index IF not exists idx_recurring_transactions_category_id on public.recurring_transactions using btree (category_id) TABLESPACE pg_default;
+<p align="left">
+<a href="https://docs.microsoft.com/en-us/cpp/?view=msvc-170" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/c-colored.svg" alt="C" title="C" width="36" height="36" /></a><a href="https://docs.microsoft.com/en-us/cpp/?view=msvc-170" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/cplusplus-colored.svg" alt="C++" title="C++" width="36" height="36" /></a><a href="https://git-scm.com/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/git-colored.svg" alt="Git" title="Git" width="36" height="36" /></a><a href="https://www.php.net/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/php-colored.svg" alt="PHP" title="PHP" width="36" height="36" /></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/javascript-colored.svg" alt="JavaScript" title="JavaScript" width="36" height="36" /></a><a href="https://www.oracle.com/java/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/java-colored.svg" alt="Java" title="Java" width="36" height="36" /></a><a href="https://www.typescriptlang.org/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/typescript-colored.svg" alt="TypeScript" title="TypeScript" width="36" height="36" /></a><a href="https://code.visualstudio.com/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/visualstudiocode-colored.svg" alt="VS Code" title="VS Code" width="36" height="36" /></a><a href="https://developer.mozilla.org/en-US/docs/Glossary/HTML5" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/html5-colored.svg" alt="HTML5" title="HTML5" width="36" height="36" /></a><a href="https://reactjs.org/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/react-colored.svg" alt="React" title="React" width="36" height="36" /></a><a href="https://www.w3.org/TR/CSS/#css" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/css3-colored.svg" alt="CSS3" title="CSS3" width="36" height="36" /></a><a href="https://tailwindcss.com/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/tailwindcss-colored.svg" alt="TailwindCSS" title="TailwindCSS" width="36" height="36" /></a><a href="https://getbootstrap.com/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/bootstrap-colored.svg" alt="Bootstrap" title="Bootstrap" width="36" height="36" /></a><a href="https://nodejs.org/en/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/nodejs-colored.svg" alt="NodeJS" title="NodeJS" width="36" height="36" /></a><a href="https://expressjs.com/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/express-colored-dark.svg" alt="Express" title="Express" width="36" height="36" /></a><a href="https://www.mongodb.com/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/mongodb-colored.svg" alt="MongoDB" title="MongoDB" width="36" height="36" /></a><a href="https://www.postgresql.org/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/postgresql-colored.svg" alt="PostgreSQL" title="PostgreSQL" width="36" height="36" /></a><a href="https://www.mysql.com/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/mysql-colored.svg" alt="MySQL" title="MySQL" width="36" height="36" /></a><a href="https://supabase.io/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/supabase-colored.svg" alt="Supabase" title="Supabase" width="36" height="36" /></a>
+</p>
 
-create index IF not exists idx_recurring_transactions_next_run on public.recurring_transactions using btree (next_run_date) TABLESPACE pg_default
-where
-  (is_active = true);
+### Socials
 
-create index IF not exists idx_recurring_transactions_active on public.recurring_transactions using btree (is_active) TABLESPACE pg_default;
+<p align="left"> <a href="https://www.github.com/Dhruv-Adhiya" target="_blank" rel="noreferrer"> <picture> <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/socials/github-dark.svg" /> <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/socials/github.svg" /> <img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/socials/github.svg" width="32" height="32" alt="GitHub" title="GitHub" /> </picture> </a> <a href="https://www.linkedin.com/in/dhruv-adhiya" target="_blank" rel="noreferrer"> <picture> <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/socials/linkedin-dark.svg" /> <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/socials/linkedin.svg" /> <img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/socials/linkedin.svg" width="32" height="32" alt="LinkedIn" title="LinkedIn" /> </picture> </a></p>
+### Badges
 
-create unique INDEX IF not exists unique_recurring_rule_per_user on public.recurring_transactions using btree (user_id, category_id, frequency, start_date) TABLESPACE pg_default;
+<b>My GitHub Stats</b>
 
-create index IF not exists idx_recurring_transactions_payment_source on public.recurring_transactions using btree (payment_source) TABLESPACE pg_default;
+<a href="http://www.github.com/Dhruv-Adhiya"><img src="https://github-readme-stats.vercel.app/api?username=Dhruv-Adhiya&show_icons=true&hide=&count_private=true&title_color=0891b2&text_color=ffffff&icon_color=0891b2&bg_color=1c1917&hide_border=true&show_icons=true" alt="Dhruv-Adhiya's GitHub stats" /></a>
+
+<a href="http://www.github.com/Dhruv-Adhiya"><img src="https://github-readme-streak-stats.herokuapp.com/?user=Dhruv-Adhiya&stroke=ffffff&background=1c1917&ring=0891b2&fire=0891b2&currStreakNum=ffffff&currStreakLabel=0891b2&sideNums=ffffff&sideLabels=ffffff&dates=ffffff&hide_border=true" /></a>
+
+<a href="https://github.com/Dhruv-Adhiya" align="left"><img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Dhruv-Adhiya&langs_count=10&title_color=0891b2&text_color=ffffff&icon_color=0891b2&bg_color=1c1917&hide_border=true&locale=en&custom_title=Top%20%Languages" alt="Top Languages" /></a>
