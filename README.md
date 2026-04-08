@@ -1,15 +1,80 @@
+create table public.recurring_transactions (
+  id serial not null,
+  user_id integer not null,
+  category_id integer not null,
+  type character varying(20) not null,
+  amount numeric(10, 2) not null,
+  description text null,
+  frequency character varying(20) not null,
+  start_date date not null,
+  end_date date null,
+  next_run_date date not null,
+  last_run_date date null,
+  is_active boolean not null default true,
+  created_at timestamp without time zone null default CURRENT_TIMESTAMP,
+  payment_source character varying(20) not null default 'online'::character varying,
+  constraint recurring_transactions_pkey primary key (id),
+  constraint recurring_transactions_category_id_fkey foreign KEY (category_id) references categories (id) on delete RESTRICT,
+  constraint recurring_transactions_user_id_fkey foreign KEY (user_id) references users (id) on delete CASCADE,
+  constraint recurring_transactions_amount_check check ((amount > (0)::numeric)),
+  constraint recurring_transactions_payment_source_check check (
+    (
+      (payment_source)::text = any (
+        (
+          array[
+            'cash'::character varying,
+            'online'::character varying,
+            'credit_card'::character varying
+          ]
+        )::text[]
+      )
+    )
+  ),
+  constraint recurring_transactions_type_check check (
+    (
+      (type)::text = any (
+        (
+          array[
+            'income'::character varying,
+            'expense'::character varying
+          ]
+        )::text[]
+      )
+    )
+  ),
+  constraint recurring_transactions_next_run_check check ((next_run_date >= start_date)),
+  constraint recurring_transactions_date_check check (
+    (
+      (end_date is null)
+      or (end_date >= start_date)
+    )
+  ),
+  constraint recurring_transactions_frequency_check check (
+    (
+      (frequency)::text = any (
+        (
+          array[
+            'daily'::character varying,
+            'weekly'::character varying,
+            'monthly'::character varying,
+            'yearly'::character varying
+          ]
+        )::text[]
+      )
+    )
+  )
+) TABLESPACE pg_default;
 
-## 🌐 Socials:
-[![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?logo=Instagram&logoColor=white)](https://instagram.com/dhruv_adhiya)  [![email](https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white)](mailto:dhruvadhiya230407@gmail.com) 
+create index IF not exists idx_recurring_transactions_user_id on public.recurring_transactions using btree (user_id) TABLESPACE pg_default;
 
-# 💻 Tech Stack:
-![C](https://img.shields.io/badge/c-%2300599C.svg?style=plastic&logo=c&logoColor=white) ![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=plastic&logo=c%2B%2B&logoColor=white) ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=plastic&logo=css3&logoColor=white) ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=plastic&logo=openjdk&logoColor=white) ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=plastic&logo=html5&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=plastic&logo=javascript&logoColor=%23F7DF1E) ![PHP](https://img.shields.io/badge/php-%23777BB4.svg?style=plastic&logo=php&logoColor=white) ![Apache](https://img.shields.io/badge/apache-%23D42029.svg?style=plastic&logo=apache&logoColor=white) ![MicrosoftSQLServer](https://img.shields.io/badge/Microsoft%20SQL%20Server-CC2927?style=plastic&logo=microsoft%20sql%20server&logoColor=white) ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=plastic&logo=mysql&logoColor=white) ![Canva](https://img.shields.io/badge/Canva-%2300C4CC.svg?style=plastic&logo=Canva&logoColor=white)
-# 📊 GitHub Stats:
-![](https://github-readme-stats.vercel.app/api?username=Dhruv-Adhiya&theme=radical&hide_border=false&include_all_commits=true&count_private=true)<br/>
-![](https://nirzak-streak-stats.vercel.app/?user=Dhruv-Adhiya&theme=radical&hide_border=false)<br/>
-![](https://github-readme-stats.vercel.app/api/top-langs/?username=Dhruv-Adhiya&theme=radical&hide_border=false&include_all_commits=true&count_private=true&layout=compact)
+create index IF not exists idx_recurring_transactions_category_id on public.recurring_transactions using btree (category_id) TABLESPACE pg_default;
 
----
-[![](https://visitcount.itsvg.in/api?id=Dhruv-Adhiya&icon=0&color=0)](https://visitcount.itsvg.in)
+create index IF not exists idx_recurring_transactions_next_run on public.recurring_transactions using btree (next_run_date) TABLESPACE pg_default
+where
+  (is_active = true);
 
-<!-- Proudly created with GPRM ( https://gprm.itsvg.in ) -->
+create index IF not exists idx_recurring_transactions_active on public.recurring_transactions using btree (is_active) TABLESPACE pg_default;
+
+create unique INDEX IF not exists unique_recurring_rule_per_user on public.recurring_transactions using btree (user_id, category_id, frequency, start_date) TABLESPACE pg_default;
+
+create index IF not exists idx_recurring_transactions_payment_source on public.recurring_transactions using btree (payment_source) TABLESPACE pg_default;
